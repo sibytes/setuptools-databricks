@@ -1,0 +1,58 @@
+# Python package
+
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+strategy:
+  matrix:
+    Python37:
+      python.version: '3.7'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    python -m pip install --upgrade pip setuptools wheel twine
+    pip install -r requirements.txt
+    pip install -r dev_requirements.txt
+  displayName: 'Install dependencies'
+
+
+- script: |
+    pip install .
+    pytest
+  displayName: 'Unit Tests'
+
+- script: |
+    python setup.py sdist bdist_wheel
+  displayName: 'Artifact creation'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+      dist/**`
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish Build Artefacts'
+
+- task: TwineAuthenticate@0
+  inputs:
+    artifactFeeds: 'sibytes'
+  displayName: 'Authenticate Twine'
+
+- script: |
+    twine upload -r sibytes --config-file $(PYPIRC_PATH) $(Build.SourcesDirectory)/dist/*
+  continueOnError: true
+  displayName: 'Publish to Databricks Artefact Store'
