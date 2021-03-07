@@ -1,5 +1,5 @@
 
-import fathom.Configuration as config
+from setuptools_databricks.DatabricksBuild import DatabricksBuild
 import os
 
 
