@@ -36,5 +36,9 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     packages=["setuptools_databricks"],
+    install_requires=[
+          'wheel-inspect',
+          'PyYAML'
+      ],
     zip_safe=False
 )
