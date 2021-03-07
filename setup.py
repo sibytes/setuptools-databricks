@@ -12,7 +12,7 @@ DATABRICKS_RUNTIME="dbr7.3"
 
 # This call to setup() does all the work
 setup(
-    name=f"setup-databricks",
+    name=f"setuptools-databricks",
     version_config={
         "template": "{tag}",
         "dev_template": "{tag}.dev{ccount}",
@@ -35,6 +35,6 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=["databricks"],
+    packages=["setuptools_databricks"],
     zip_safe=False
 )
