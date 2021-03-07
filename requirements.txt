@@ -1,2 +1,3 @@
 setuptools
 wheel_inspect
+yaml
